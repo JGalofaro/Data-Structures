@@ -4,6 +4,10 @@
 #include <iostream>
 using namespace std;
 
+/**
+ * Author: Josh Galofaro
+ * Date: 09-13-2011
+ **/
 int main(void)
 {
     insert<int> Insertion;
