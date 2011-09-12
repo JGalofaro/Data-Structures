@@ -25,6 +25,8 @@ int fib(int levels)
         }//end for
         cout << endl; //formatoing
     }//end if
+    else if( levels >= 1 ) cout << x << ", " << y << endl;
+    else if( levels >= 0 ) cout << x << endl;
 }
 
 int Rec_Fib(int levels)
