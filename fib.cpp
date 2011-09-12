@@ -27,12 +27,22 @@ int fib(int levels)
     }//end if
 }
 
+int Rec_Fib(int levels)
+{
+    if( levels == 0 ) return 0;
+    else if( levels == 1 ) return 1;
+    else return Rec_Fib(levels-1) + Rec_Fib(levels-2);
+}
+
 int main(void)
 {
     int levels = 0;
     
     cout << "How many numbers do you want to see?: ";
     cin >> levels;
-    
+ 
+    cout << "Final: ";
+    cout << Rec_Fib(levels) << endl;
+       
     fib(levels);
 }
