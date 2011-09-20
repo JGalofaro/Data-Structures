@@ -20,12 +20,16 @@ public:
     void generate(int number_of_tests, string file_name);
 private:
     void output(string file_name, int array[], int size);
+    void formatFileNames(string file_name);
+    string original_file_name, output_file_unsorted, output_file_sorted;
 };
 
 void generator::generate(int number_of_tests, string file_name)
 {
     int size = 0;
-    
+    original_file_name = file_name;
+    formatFileNames(file_name);
+
     //Initialize random seed:
     srand( time(NULL) );
         
@@ -46,6 +50,30 @@ void generator::generate(int number_of_tests, string file_name)
     }//end for
 }//end method
 
+void generator::formatFileNames(string file_name)
+{
+    size_t extension = 0;
+    string uns = "_unsorted";
+    string sor = "_sorted_";
+
+    /** TO BE IMPLEMENTED **/
+    /**
+    if( sortType == 1 ) append Select Sort
+    else if( sortType == 2 ) append Bubble Sort
+    else if( sortType == 3 ) append Insert Sort
+    else if( sortType == 0 ) append All
+    **/
+
+    //If file_name is empty, assign default name
+    if( file_name.empty() ) file_name = "SortTest_Output.txt";
+
+    extension = file_name.find_last_of(".");
+    cout << extension << endl;
+    output_file_unsorted = file_name;
+    output_file_unsorted.insert(extension, uns);
+
+    cout << output_file_unsorted << endl;
+}
 void generator::output(string file_name, int array[], int size)
 {
     ofstream ofile;
@@ -80,9 +108,7 @@ int main( int argc, char* argv[] )
     cout << "Argument 2: " << file << endl;
     cout << "ARgument 3: " << sortType << endl;
     **/
-    
-    //const static int N = 5;
-    //const static string file = "test_generator_1.txt";
+
     generator* gen = new generator();
     gen->generate( N, file );
     
