@@ -66,11 +66,34 @@ void generator::output(string file_name, int array[], int size)
     ofile.close();
 }//end method
 
-int main( void )
+int main( int argc, char* argv[] )
 {
-    const static int N = 5;
-    const static string file = "test_generator_1.txt";
+    int N = atoi(argv[1]);
+    string file = argv[2];
+    int sortType = atoi(argv[3]);    
+    
+    /** Testing Purposes
+    cout << "Argument 1: " << N << endl;
+    cout << "Argument 2: " << file << endl;
+    cout << "ARgument 3: " << sortType << endl;
+    **/
+    
+    //const static int N = 5;
+    //const static string file = "test_generator_1.txt";
     generator* gen = new generator();
     gen->generate( N, file );
+    
+    /** 09-20-2011: This should be implemented **/
+    /**
+    if( sortType == 1 ) run Select Sort
+    else if( sortType == 2 ) run Bubble Sort
+    else if( sortType == 3 ) run Insert Sort
+    else if( sortType == 0 )
+    {
+         run Select Sort;
+         run Bubble Sort;
+         run Insert Sort;
+    }
+    **/
     return 1;
 }//end method
