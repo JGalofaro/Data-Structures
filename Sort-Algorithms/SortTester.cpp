@@ -4,6 +4,14 @@
 #include <time.h>
 #include <string>
 
+/**
+ * TO ADD:
+ *  * Main Parameters:
+ *      * # of tests
+ *      * output file name (will add postfix: unsorted or sorted_[sort-type])
+ *      * sort type ('*' or some simillar key to sort with every possible algoritm)
+ *  * Sort arrays and output sorted to file
+ **/
 using namespace std;
 
 class generator
