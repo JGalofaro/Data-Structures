@@ -68,8 +68,11 @@ void generator::output(string file_name, int array[], int size)
 
 int main( int argc, char* argv[] )
 {
+    // First argument: Number of Random Tests
     int N = atoi(argv[1]);
+    // Second argument: File name to output
     string file = argv[2];
+    // Third argument: Sorting algorithm to use
     int sortType = atoi(argv[3]);    
     
     /** Testing Purposes
