@@ -2,7 +2,7 @@
  * Expression_Tree.cpp
  *
  * Version:
- *  0.1.3.0
+ *  0.1.4.0
  *
  * Author: Josh Galofaro
  * Date: 10/18/2011
@@ -10,6 +10,7 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
+#include <sstream>
 #include <string>
 using namespace std;
 
@@ -49,11 +50,17 @@ public:
     ~Expression_Tree();
     bool isEmpty();
     int getValue();
+    void printInfix();
+    void printPrefix();
+    void printPostfix();
 private:
     int eval( treeNode *ptr );
     void scan( char *exp_array, int size );
     void insert( int operand );
     void insert( char operation );
+    void infix( treeNode *ptr );
+    void prefix( treeNode *ptr );
+    void postfix( treeNode *ptr );
     treeNode *root;
     int numberOfNodes;
 };
@@ -71,7 +78,7 @@ Expression_Tree::Expression_Tree( string expression )
     strcpy(exp_array, expression.c_str());
     scan(exp_array, expression.length());
     
-    cerr << "Tree created." << endl;
+    //cerr << "Tree created." << endl;
 }
 
 void Expression_Tree::scan( char *exp_array, int size)
@@ -166,6 +173,66 @@ void Expression_Tree::insert( char operation )
     numberOfNodes++;
 }
 
+void Expression_Tree::printInfix()
+{
+    infix(root);
+    cout << endl;   //clear stream
+}
+
+void Expression_Tree::infix( treeNode *ptr )
+{
+    if( ptr != NULL )
+    {
+        infix( ptr->left );
+        
+        if( ptr->data.type == OPERAND ) cout << ptr->data.operand;
+        else cout << ptr->data.operation;
+        cout << " ";
+        
+        infix( ptr->right );
+    }
+}
+
+void Expression_Tree::printPrefix()
+{
+    prefix(root);
+    cout << endl;   //clear stream
+}
+
+void Expression_Tree::prefix( treeNode *ptr )
+{
+    if( ptr != NULL )
+    {
+        if( ptr->data.type == OPERAND ) cout << ptr->data.operand;
+        else cout << ptr->data.operation;
+        cout << " "; 
+        
+        prefix( ptr->left );
+        
+        prefix( ptr->right );
+        
+    }
+}
+
+void Expression_Tree::printPostfix()
+{
+    postfix(root);
+    cout << endl;   //clear stream
+}
+
+void Expression_Tree::postfix( treeNode *ptr )
+{
+    if( ptr != NULL )
+    {
+        postfix( ptr->left );
+        
+        postfix( ptr->right );
+        
+        if( ptr->data.type == OPERAND ) cout << ptr->data.operand;
+        else cout << ptr->data.operation;
+        cout << " "; 
+    }
+}
 /**
  *  isEmpty
  *      Checks if the tree is empty or not
@@ -209,19 +276,27 @@ int Expression_Tree::eval( treeNode *ptr )
  **/
 Expression_Tree::~Expression_Tree()
 {
-    cerr << "Tree destroyed." << endl;
+    //cerr << "Tree destroyed." << endl;
 }
 
-int main( void )
+int main( int argc, char *argv[] )
 {
-    cerr << "Compiled." << endl;
+    //cerr << "Compiled." << endl;
     
-    string exp = "15+4*2";
-    int setAnswer = 38;
+    string exp = argv[1];
     
     Expression_Tree * t = new Expression_Tree(exp);
-    cout << "IS EMPTY: " << t->isEmpty() << endl;
-    cout << "VALUE: " << t->getValue() << endl;
+
+    cout << "Infix: ";
+    t->printInfix();
+    
+    cout << "Prefix: ";
+    t->printPrefix();
+    
+    cout << "Postfix: ";
+    t->printPostfix();
+
+    cout << "VALUE: " << t->getValue() << endl;    
     delete t;
     
     return 1;
