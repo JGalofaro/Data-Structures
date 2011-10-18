@@ -2,12 +2,15 @@
  * Expression_Tree.cpp
  *
  * Version:
- *  0.1.1.0
+ *  0.1.2.0
  *
  * Author: Josh Galofaro
  * Date: 10/18/2011
  **/
 #include <iostream>
+#include <cstring>
+#include <cstdlib>
+#include <string>
 using namespace std;
 
 //InfoNode holds either a operator or an operand, using union we can
@@ -31,21 +34,25 @@ struct treeNode
     treeNode *left;
     treeNode *right;
 };
+
 /**
  * Expression_Tree
  *  (Class)
  *
  *  This class creates and manipulates an expression tree, with the ability to
- *  print the tree in either, postfix, prefix or inorder notation.
+ *  print the tree in either, postfix, prefix or infix notation.
  **/
 class Expression_Tree
 {
 public:
-    Expression_Tree();
+    Expression_Tree( string expression );
     ~Expression_Tree();
     bool isEmpty();
 private:
     int eval( treeNode *ptr );
+    void scan( char *exp_array, int size );
+    void insert( int operand );
+    void insert( char operation );
     treeNode *root;
     int numberOfNodes;
 };
@@ -54,13 +61,67 @@ private:
  * Expression Tree
  *  (Constructor)
  **/
-Expression_Tree::Expression_Tree()
+Expression_Tree::Expression_Tree( string expression )
 {  
     numberOfNodes = 0;
-    
+    char *exp_array = new char[expression.length() + 1];
+    strcpy(exp_array, expression.c_str());
+    scan(exp_array, expression.length());
     cerr << "Tree created." << endl;
 }
 
+void Expression_Tree::scan( char *exp_array, int size)
+{
+    bool isOperation = false;
+    string operand = "";
+    char operation = NULL;
+    
+    //Debug purposes:
+    for( int i = 0; i <= size; i++ )
+    {
+        if( exp_array[i] == '+' || exp_array[i] == '-' 
+            || exp_array[i] == '*' || exp_array[i] == '/' )
+        {
+            operation = exp_array[i];
+            isOperation = true;
+        } else operand += exp_array[i];
+        
+        if( isOperation )
+        {
+            if( operand.size() == 0 )
+            {
+                cerr << "ERROR: Expression is not in correct form" << endl;
+                exit(1);
+            }
+            int op = atoi(operand.c_str());
+            insert( op );
+            insert( operation );
+            
+            isOperation = false;
+            operation = NULL;
+            operand = "";
+        }else if( i == size ) //end of the expression
+        {
+            if( operand.size() == 0 )
+            {
+                cerr << "ERROR: Expression is not in correct form" << endl;
+                exit(1);
+            }
+            int op = atoi(operand.c_str());
+            insert( op );
+        }
+    }
+}
+
+void Expression_Tree::insert( int operand )
+{
+    cerr << "INT: " << operand << endl;
+}
+
+void Expression_Tree::insert( char operation )
+{
+    cerr << "CHAR: " << operation << endl;
+}
 /**
  *  isEmpty
  *      Checks if the tree is empty or not
@@ -91,6 +152,7 @@ int Expression_Tree::eval( treeNode *ptr )
             }
     }
 }
+
 /**
  * Expression Tree
  *  (Deconstructor)
@@ -104,7 +166,10 @@ int main( void )
 {
     cerr << "Compiled." << endl;
     
-    Expression_Tree * t = new Expression_Tree();
+    string exp = "15+4*2";
+    int setAnswer = 18;
+    
+    Expression_Tree * t = new Expression_Tree(exp);
     cout << "IS EMPTY: " << t->isEmpty() << endl;
     delete t;
     
