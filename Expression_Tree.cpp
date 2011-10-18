@@ -2,7 +2,7 @@
  * Expression_Tree.cpp
  *
  * Version:
- *  0.1.2.0
+ *  0.1.3.0
  *
  * Author: Josh Galofaro
  * Date: 10/18/2011
@@ -48,6 +48,7 @@ public:
     Expression_Tree( string expression );
     ~Expression_Tree();
     bool isEmpty();
+    int getValue();
 private:
     int eval( treeNode *ptr );
     void scan( char *exp_array, int size );
@@ -64,9 +65,12 @@ private:
 Expression_Tree::Expression_Tree( string expression )
 {  
     numberOfNodes = 0;
+    root = new treeNode;
+    
     char *exp_array = new char[expression.length() + 1];
     strcpy(exp_array, expression.c_str());
     scan(exp_array, expression.length());
+    
     cerr << "Tree created." << endl;
 }
 
@@ -115,13 +119,53 @@ void Expression_Tree::scan( char *exp_array, int size)
 
 void Expression_Tree::insert( int operand )
 {
-    cerr << "INT: " << operand << endl;
+    //cerr << "ADDING INT: " << operand << endl;
+    treeNode *temp = new treeNode;
+    
+    if( numberOfNodes == 0 )    //New tree
+    {
+        root->data.type = OPERAND;
+        root->data.operand = operand;
+    }else
+    {
+        temp->data.type = OPERAND;
+        temp->data.operation = operand;
+        
+        if( root->right == NULL ) root->right = temp;
+        else
+        {
+            cerr << "ERROR right root node is not empty" << endl;
+            exit(1);
+        }
+    }
+    
+    numberOfNodes++;
 }
 
 void Expression_Tree::insert( char operation )
 {
-    cerr << "CHAR: " << operation << endl;
+    //cerr << "ADDING CHAR: " << operation << endl;
+    
+    treeNode *temp = new treeNode;
+    
+    if( numberOfNodes == 0 )    //New Tree
+    {
+        root->data.type = OPERATOR;
+        root->data.operation = operation;
+    }else
+    {
+        //Create the new node
+        temp->data.type = OPERATOR;
+        temp->data.operation = operation;
+        
+        //The new node becomes the root, tree is shifted to the left
+        temp->left = root;
+        root = temp;
+    }
+    
+    numberOfNodes++;
 }
+
 /**
  *  isEmpty
  *      Checks if the tree is empty or not
@@ -130,6 +174,12 @@ bool Expression_Tree::isEmpty()
 {
     return (numberOfNodes == 0);
 }
+
+int Expression_Tree::getValue()
+{
+    return eval(root);
+}
+
 /**
  * eval
  *  Calculates the value of the expression tree
@@ -167,10 +217,11 @@ int main( void )
     cerr << "Compiled." << endl;
     
     string exp = "15+4*2";
-    int setAnswer = 18;
+    int setAnswer = 38;
     
     Expression_Tree * t = new Expression_Tree(exp);
     cout << "IS EMPTY: " << t->isEmpty() << endl;
+    cout << "VALUE: " << t->getValue() << endl;
     delete t;
     
     return 1;
